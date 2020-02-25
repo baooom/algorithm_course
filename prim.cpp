@@ -45,51 +45,81 @@ using namespace std;
 const int maxn = 1e5 + 10;
 struct EDGE
 {
+    int next, to, w;
+} edge[maxn << 1];
+int head[maxn], tot;
+inline void addedge(int u, int v, int w)
+{
+    edge[tot] = {head[u], v, w};
+    head[u] = tot++;
+}
+struct node
+{
     int u, v, w;
-    bool operator < (const EDGE& other)const
+    node(int _u, int _v, int _w) : u(_u), v(_v), w(_w){}
+    bool operator < (const node& other)const
     {
-        return w < other.w;
+        return w > other.w;
     }
-} edge[maxn];
+};
+
 int f[maxn];
 int find(int x)
 {
     return x == f[x] ? f[x] : f[x] = find(f[x]);
 }
-void joint(int u,int v)
+
+void joint(int u, int v)
 {
     int fu = find(u), fv = find(v);
-    if(fu!=fv)
+    if (u != v)
         f[fu] = fv;
 }
-ll kruskal(int n,int m)
+
+ll prim(int s)
 {
-    sort(edge, edge + m);
-    ll res = 0;
-    int tot = 0;
-    for (int i = 0; i < m; ++i)
+    priority_queue<node> q;
+    for (int i = head[s]; ~i; i = edge[i].next)
     {
-        if (find(edge[i].u) != find(edge[i].v))
+        int v = edge[i].to;
+        q.push(node(s, v, edge[i].w));
+    }
+    ll res = 0;
+    while(!q.empty())
+    {
+        int u = q.top().u, v = q.top().v, w = q.top().w;
+        q.pop();
+        if (find(u) == find(v))
+            continue;
+        res += w;
+        joint(u, v);
+        for (int i = head[v]; ~i; i = edge[i].next)
         {
-            joint(edge[i].u, edge[i].v);
-            res += edge[i].w;
-            ++tot;
+            int t = edge[i].to;
+            if(find(v)==find(t))
+                continue;
+            q.push(node(v, t, edge[i].w));
         }
-        if (tot == n - 1)
-            break;
     }
     return res;
 }
+
 int main()
 {
     int n, m;
     int u, v, w;
     scanf("%d%d", &n, &m);
     for (int i = 1; i <= n; ++i)
+    {
         f[i] = i;
+        head[i] = -1;
+    }
     for (int i = 0; i < m; ++i)
     {
-        scanf("%d%d%d", &edge[i].u, &edge[i].v, &edge[i].w);
+        scanf("%d%d%d", &u, &v, &w);
+        addedge(u, v, w);
+        addedge(v, u, w);
     }
-    printf("%lld\n", kruskal(n, m));
+    printf("%lld\n", prim(1));
+    return 0;
 }
