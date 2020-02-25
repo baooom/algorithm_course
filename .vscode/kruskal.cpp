@@ -91,5 +91,5 @@ int main()
     {
         scanf("%d%d%d", edge[i].u, edge[i].v, edge[i].w);
     }
-    
+    printf("%lld\n", kruskal(n, m));
 }
