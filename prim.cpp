@@ -55,50 +55,41 @@ inline void addedge(int u, int v, int w)
 }
 struct node
 {
-    int u, v, w;
-    node(int _u, int _v, int _w) : u(_u), v(_v), w(_w){}
+    int  v, w;
+    node(int _v, int _w) : v(_v), w(_w){}
     bool operator < (const node& other)const
     {
         return w > other.w;
     }
 };
 
-int f[maxn];
-int find(int x)
-{
-    return x == f[x] ? f[x] : f[x] = find(f[x]);
-}
-
-void joint(int u, int v)
-{
-    int fu = find(u), fv = find(v);
-    if (u != v)
-        f[fu] = fv;
-}
+bool vis[maxn];
 
 ll prim(int s)
 {
     priority_queue<node> q;
+    memset(vis, 0, sizeof vis);
+    vis[s] = 1;
     for (int i = head[s]; ~i; i = edge[i].next)
     {
         int v = edge[i].to;
-        q.push(node(s, v, edge[i].w));
+        q.push(node(v, edge[i].w));
     }
     ll res = 0;
     while(!q.empty())
     {
-        int u = q.top().u, v = q.top().v, w = q.top().w;
+        int u = q.top().v, w = q.top().w;
         q.pop();
-        if (find(u) == find(v))
+        if(vis[u])
             continue;
         res += w;
-        joint(u, v);
-        for (int i = head[v]; ~i; i = edge[i].next)
+        vis[u] = 1;
+        for (int i = head[u]; ~i; i = edge[i].next)
         {
-            int t = edge[i].to;
-            if(find(v)==find(t))
+            int v = edge[i].to;
+            if(vis[v])
                 continue;
-            q.push(node(v, t, edge[i].w));
+            q.push(node(v, edge[i].w));
         }
     }
     return res;
@@ -111,7 +102,6 @@ int main()
     scanf("%d%d", &n, &m);
     for (int i = 1; i <= n; ++i)
     {
-        f[i] = i;
         head[i] = -1;
     }
     for (int i = 0; i < m; ++i)
