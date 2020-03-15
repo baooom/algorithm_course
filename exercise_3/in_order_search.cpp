@@ -50,6 +50,8 @@ int search(int a[],int len,int x)
     {
         if (a[i] == x)
             return i;
+        if (a[i] > x)
+            return 0;
     }
     return 0;
 }
