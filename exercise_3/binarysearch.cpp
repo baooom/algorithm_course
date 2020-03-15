@@ -50,6 +50,8 @@ int search(int a[],int len,int x)
     while (l <= r)
     {
         int mid = l + r >> 1;
+        if(a[mid]==x)
+            return mid;
         if (a[mid] >= x)
             r = mid - 1;
         else
