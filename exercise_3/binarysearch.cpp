@@ -44,6 +44,22 @@ inline void read(T &x)
 using namespace std;
 const int maxn=1e5+10;
 int T[maxn];
+int search(int a[],int len,int x)
+{
+    int l = 1, r = len;
+    while (l <= r)
+    {
+        int mid = l + r >> 1;
+        if (a[mid] >= x)
+            r = mid - 1;
+        else
+            l = mid + 1;
+    }
+    if (l > len)
+        return 0;
+    else
+        return l;
+}
 int main()
 {
     int n;
@@ -54,17 +70,5 @@ int main()
     }
     int x;
     scanf("%d", &x);
-    int l = 1, r = n;
-    while (l <= r)
-    {
-        int mid = l + r >> 1;
-        if (T[mid] >= x)
-            r = mid - 1;
-        else
-            l = mid + 1;
-    }
-    if (l > n)
-        puts("0");
-    else
-        printf("%d\n", l);
+    printf("%d\n", search(T, n, x));
 }
