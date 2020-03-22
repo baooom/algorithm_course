@@ -42,7 +42,7 @@ inline void read(T &x)
     // FILE* _OUTPUT=freopen("output.txt", "w", stdout);
 #endif
 using namespace std;
-void merge(int A[], int T[], int S[], int len1, int len2)
+void merge(int A[], int T[], int S[], int len1, int len2)//将长度为len1的序列S和长度为len2的序列T进行归并，结果储存在A中
 {
     int p = 0;
     int i = 0, j = 0;
@@ -59,14 +59,14 @@ void merge(int A[], int T[], int S[], int len1, int len2)
         A[p++] = S[j++];
 }
 
-void mergeSort(int A[], int T[], int len)
+void mergeSort(int A[], int T[], int len)//递归排序
 {
     if (len == 1)
         return;
     int mid = len / 2;
-    mergeSort(A, T, mid);
-    mergeSort(A + mid, T + mid, len - mid);
-    merge(T, A, A + mid, mid, len - mid);
+    mergeSort(A, T, mid);//先处理前半
+    mergeSort(A + mid, T + mid, len - mid);//处理后半
+    merge(T, A, A + mid, mid, len - mid);//对序列进行归并
     for (int i = 0; i < len; ++i)
         A[i] = T[i];
 }
