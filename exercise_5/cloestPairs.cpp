@@ -66,7 +66,7 @@ double cal(point a[],int len)
         return inf;
     if(len==2)
         return dis(a[0], a[1]);
-    double p = (a[0].x + a[len - 1].x) / 2;
+    double p = a[len / 2 - 1].x;
     int mid = len / 2;
     double d = min(cal(a, mid), cal(a + mid, len - mid));
     int tot = 0;
