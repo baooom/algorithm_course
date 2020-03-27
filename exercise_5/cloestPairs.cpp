@@ -45,7 +45,7 @@ using namespace std;
 const int maxn = 1e5 + 10;
 struct point
 {
-    int x, y;
+    double x, y;
 } p[maxn];
 
 double dis(point a,point b)
@@ -92,8 +92,7 @@ int main()
     read(n);
     for (int i = 0; i < n; ++i)
     {
-        read(p[i].x);
-        read(p[i].y);
+        scanf("%lf%lf", &p[i].x, &p[i].y);
     }
     sort(p, p + n, cmpx);
     printf("%.6f\n", cal(p, n));
