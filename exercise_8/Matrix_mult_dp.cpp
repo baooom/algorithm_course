@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <bitset>
 #include <assert.h>
+#include <time.h>
 // #define getchar() (p1 == p2 && (p2 = (p1 = buf) + fread(buf, 1, 1 << 21, stdin), p1 == p2) ? EOF : *p1++)
 // char buf[(1 << 21) + 1], * p1 = buf, * p2 = buf;
 // #define int long long
@@ -42,7 +43,7 @@ inline void read(T &x)
     // FILE* _OUTPUT=freopen("output.txt", "w", stdout);
 #endif
 using namespace std;
-const int maxn = 510;
+const int maxn = 1010;
 int p[maxn], a[maxn], b[maxn];
 int s[maxn][maxn], dp[maxn][maxn];
 
@@ -62,6 +63,7 @@ int main()
     memset(dp, 0x3f, sizeof dp);
     for (int i = 1; i <= n - 1; ++i)
         dp[i][i] = 0, s[i][i] = i;
+    clock_t pre = clock();
     for (int len = 2; len <= n - 1; ++len)
     {
         for (int l = 1, r; l + len - 1 <= n - 1; ++l)
@@ -79,4 +81,5 @@ int main()
         }
     }
     printf("%d\n", dp[1][n - 1]);
+    printf("time used:%f\n", (clock() - pre) * 1.0 / CLOCKS_PER_SEC);
 }
