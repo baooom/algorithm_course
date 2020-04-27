@@ -60,10 +60,10 @@ int main()
         a[i] = p[i];
         b[i] = p[i + 1];
     }
+    clock_t pre = clock();
     memset(dp, 0x3f, sizeof dp);
     for (int i = 1; i <= n - 1; ++i)
         dp[i][i] = 0, s[i][i] = i;
-    clock_t pre = clock();
     for (int len = 2; len <= n - 1; ++len)
     {
         for (int l = 1, r; l + len - 1 <= n - 1; ++l)

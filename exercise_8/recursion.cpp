@@ -43,7 +43,7 @@ inline void read(T &x)
     // FILE* _OUTPUT=freopen("output.txt", "w", stdout);
 #endif
 using namespace std;
-const int maxn = 1010;
+const int maxn = 510;
 int p[maxn], a[maxn], b[maxn];
 int s[maxn][maxn], dp[maxn][maxn];
 
