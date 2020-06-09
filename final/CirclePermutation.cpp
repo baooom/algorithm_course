@@ -64,26 +64,30 @@ Circle temp[maxn], C[maxn], best[maxn]; //temp为回溯用的辅助数组，C为
 bool used[maxn];//表示某个圆已经被使用，防止重复计算同一个圆
 int n;
 double minWidth;//最小距离，初始化为每个直径之和，每次得到合法答案后取最小值
-void dfs(int cur){
+void dfs(int cur,double leftMost,double rightMost){
     for (int i = 0; i < n; ++i){
         if(!used[i]){//每次尝试的圆必须是没有使用过的
             used[i] = 1;
             if (cur == 0){//如果是第一个圆，则直接计算
                 temp[cur] = Circle(C[i].radius, C[i].radius);
+                leftMost = 0;
+                rightMost = 2 * C[i].radius;
             }else{//否则需要向前遍历所有的圆来得到当前尝试的圆的圆心横坐标
                 double newDot = getCenter(temp[cur - 1], C[i]);
                 for (int j = cur - 2; j >= 0; --j){
                     newDot = max(newDot, getCenter(temp[j], C[i]));
                 }
                 temp[cur] = Circle(newDot, C[i].radius);
+                leftMost = min(leftMost, newDot - C[i].radius);
+                rightMost = max(rightMost, newDot + C[i].radius);
             }
-            if(temp[cur].dot+temp[cur].radius>=minWidth){//如果此时的长度已经超过已经得到的答案，则没有继续搜索的必要
+            if (rightMost - leftMost >= minWidth){ //如果此时的长度已经超过已经得到的答案，则没有继续搜索的必要
                 used[i] = 0;
                 continue;
             }
             if (cur == n - 1){//如果当前是最后一个圆，则对答案取最小值
-                if (temp[cur].dot + temp[cur].radius < minWidth){
-                    minWidth = temp[cur].dot + temp[cur].radius;
+                if (rightMost - leftMost < minWidth){
+                    minWidth = rightMost - leftMost;
                     for (int j = 0; j < n; ++j){
                         best[j] = temp[j];
                     }
@@ -91,7 +95,7 @@ void dfs(int cur){
                 used[i] = 0;
                 continue;
             }
-            dfs(cur + 1);
+            dfs(cur + 1, leftMost, rightMost);
             used[i] = 0;
         }
     }
@@ -104,7 +108,7 @@ int main(){
         scanf("%lf", &C[i].radius);
         minWidth += C[i].radius * 2;//初始化最小值为所有圆的直径之和，易证最小宽度不会超过这个值
     }
-    dfs(0);
+    dfs(0, 0, 0);
     printf("shorest width:%.2f\n", minWidth);
     puts("best Circle Permutation:");
     for (int i = 0; i < n; ++i){
